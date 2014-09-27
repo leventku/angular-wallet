@@ -6,8 +6,9 @@
   <link rel="stylesheet" href="styles/css/font-awesome.css">
   <link rel="stylesheet" href="styles/css/main.css">
   <script src="scripts/lib/angular.js"></script>
+  <script src="scripts/app.js"></script>
 </head>
-<body ng-app>
+<body ng-app="walletApp">
   <div class="header">
     <ul>
       <li><button>Home</button></li>
@@ -15,22 +16,26 @@
       <li><button>View Source</button></li>
     </ul>
   </div>
-  <div class="main">
+  <div class="main" ng-controller="MainCtrl">
     <form>
       <label for="money-in">Money in:</label>
       <input name="money-in" id="money-in" type="number" ng-model="money.in">
       <label for="money-out">Money out:</label>
-      <input name="money-out" id="money-out" type="number">
+      <input name="money-out" id="money-out" type="number" ng-model="money.out">
       <label for="money-currency">Currency:</label>
-      <select name="money-currency" id="money-currency">
-        <option value=""></option>
+      <select ng-model="wallet.currency" name="money-currency" id="money-currency"
+        ng-options="currency for currency in money.currencies">
       </select>
-      <button ng-click="opeate()">Process</button>
+      <button ng-click="operate()">Process</button>
     </form>
     <div class="wallet">
-      <h2>Grand Total:{{wallet.currency}} {{wallet.total}}</h2>
-      <ul>
-        <li ng-repeat="operation in wallet.operations">{{wallet.currency}} {{operation.date}}</li>
+      <h2>Grand Total: {{wallet.currency}}{{wallet.total}}</h2>
+      <ul class="operations">
+        <li class="header"><span class="amount">Amount</span> <span class="date">Date</span></li>
+        <li ng-repeat="operation in wallet.operations">
+          <span class="amount">{{operation.amount | currency:wallet.currency}}</span>
+          <span class="date">{{operation.date | date:'HH:mm MMM dd, yyyy'}}</span>
+        </li>
       </ul>
     </div>
   </div>

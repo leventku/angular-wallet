@@ -9,6 +9,19 @@ ul {
   padding: 0;
 }
 
-li {
+.header li {
   display: inline-block;
+}
+
+.operations span {
+  display: inline-block;
+}
+.operations .header {
+  font-weight: bold;
+}
+.operations .amount {
+  width: 75px;
+}
+.operations .date {
+  width: 150px;
 }

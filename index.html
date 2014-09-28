@@ -9,27 +9,53 @@
   <script src="scripts/app.js"></script>
 </head>
 <body ng-app="walletApp">
-  <div class="header">
+  <div class="header" ng-controller="NavigationCtrl">
     <ul>
       <li><button>Home</button></li>
-      <li><button>Reset</button></li>
+      <li><button ng-click="reset()">Reset</button></li>
       <li><button>View Source</button></li>
     </ul>
   </div>
+
   <div class="main" ng-controller="MainCtrl">
-    <form>
-      <label for="money-in">Money in:</label>
-      <input name="money-in" id="money-in" type="number" ng-model="money.in">
-      <label for="money-out">Money out:</label>
-      <input name="money-out" id="money-out" type="number" ng-model="money.out">
-      <label for="money-currency">Currency:</label>
-      <select ng-model="wallet.currency" name="money-currency" id="money-currency"
-        ng-options="currency for currency in money.currencies">
-      </select>
-      <button ng-click="operate()">Process</button>
+    <form name="moneyForm">
+      <div class="form-group">
+        <label for="add">Money in:</label>
+        <input name="add" id="add" type="number" ng-model="money.in" cu-ensure-positive-number>
+        <span class="help-block" ng-show="moneyForm.add.$dirty && !moneyForm.add.$positive">
+          must be a positive number
+        </span>
+      </div>
+
+      <div class="form-group">
+        <label for="remove">Money out:</label>
+        <input name="remove" type="number" id="remove" ng-model="money.out" cu-ensure-positive-number>
+        <span class="help-block" ng-show="moneyForm.remove.$dirty && !moneyForm.remove.$positive">
+          must be a positive number
+        </span>
+        <span class="help-block" ng-show="!wallet.checkFunds()">
+          insufficient funds
+        </span>
+      </div>
+      
+      <div class="form-group">
+        <label for="money-currency">Currency:</label>
+        <select ng-model="wallet.currency" name="money-currency" id="money-currency"
+          ng-options="currency for currency in money.currencies" ng-disabled="wallet.hasCurrency()">
+        </select>
+        <a class="help-block" href="#" ng-show="wallet.hasCurrency()" title="A currency already set. Reset needed for currency change"> ?
+        </a>
+      </div>
+      
+      <div class="from-group">
+        <button ng-click="operate()" ng-disabled="!money.in && !money.out || !wallet.checkFunds() || !moneyForm.remove.$positive || !moneyForm.add.$positive">
+          Process
+        </button>
+      </div>
     </form>
+
     <div class="wallet">
-      <h2>Grand Total: {{wallet.currency}}{{wallet.total}}</h2>
+      <h2>Grand Total: {{wallet.currency}}{{wallet.total | number:2}}</h2>
       <ul class="operations">
         <li class="header"><span class="amount">Amount</span> <span class="date">Date</span></li>
         <li ng-repeat="operation in wallet.operations">

@@ -1,7 +1,10 @@
 body {
-  font: 14px/1.5 sans-serif;
+  font: 20px sans-serif;
   color: #222;
-  margin: 3em;
+}
+
+button {
+  font-size: 30px;
 }
 
 ul {
@@ -9,8 +12,29 @@ ul {
   padding: 0;
 }
 
+.header ul {
+  width: auto;
+}
+
 .header li {
-  display: inline-block;
+  display: block;
+}
+
+.header button{
+  width: 100%;
+  height: 40px;
+}
+
+.io select {
+  height: 30px;
+  border: 1px solid gray;
+  font-size: 20px;
+}
+
+.io .help-block {
+  font-size: 12px;
+  display: block;
+  color: red;
 }
 
 .operations span {
@@ -20,8 +44,57 @@ ul {
   font-weight: bold;
 }
 .operations .amount {
-  width: 75px;
+  width: 90px;
 }
 .operations .date {
-  width: 150px;
+  width: 280px;
+}
+
+@media screen and (min-width: 451px) {
+  body {
+    margin: 3em;
+    font-size: 16px;
+  }
+
+  button {
+    font-size: 15px;
+  }
+
+  .header ul,
+  .main {
+    min-width: 600px;
+  }
+
+  .header li {
+    display: inline-block;
+  }
+
+  .header button{
+    width: 180px;
+  }
+
+  .io,
+  .wallet {
+    float: left;
+    overflow: hidden;
+    width: 300px;
+  }
+
+  .io select {
+    height: initial;
+    border: initial;
+    font-size: initial;
+  }
+
+  .wallet h2 {
+    margin-top: 0;
+  }
+
+  .operations .amount {
+    width: 90px;
+  }
+  .operations .date {
+    width: 190px;
+  }
+
 }

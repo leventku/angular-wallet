@@ -23,7 +23,7 @@
         <label for="add">Money in:</label>
         <input name="add" id="add" type="number" ng-model="money.in" cu-ensure-positive-number>
         <span class="help-block" ng-show="moneyForm.add.$dirty && !moneyForm.add.$positive">
-          must be a positive number
+          must be a positive number to take effect
         </span>
       </div>
 
@@ -31,9 +31,9 @@
         <label for="remove">Money out:</label>
         <input name="remove" type="number" id="remove" ng-model="money.out" cu-ensure-positive-number>
         <span class="help-block" ng-show="moneyForm.remove.$dirty && !moneyForm.remove.$positive">
-          must be a positive number
+          must be a positive number to take effect
         </span>
-        <span class="help-block" ng-show="!wallet.checkFunds()">
+        <span class="help-block" ng-show="!wallet.checkFunds() && moneyForm.$valid">
           insufficient funds
         </span>
       </div>
@@ -41,26 +41,26 @@
       <div class="form-group">
         <label for="money-currency">Currency:</label>
         <select ng-model="wallet.currency" name="money-currency" id="money-currency"
-          ng-options="currency for currency in money.currencies" ng-disabled="wallet.hasCurrency()">
+          ng-options="currency.name for currency in money.currencies" ng-disabled="wallet.hasCurrency()">
         </select>
-        <a class="help-block" href="#" ng-show="wallet.hasCurrency()" title="A currency already set. Reset needed for currency change"> ?
+        <a class="help-block" href="#" ng-show="wallet.hasCurrency()" title="A currency is already set. Reset for currency change"> ?
         </a>
       </div>
       
       <div class="from-group">
-        <button ng-click="operate()" ng-disabled="!money.in && !money.out || !wallet.checkFunds() || !moneyForm.remove.$positive || !moneyForm.add.$positive">
+        <button ng-click="operate()" ng-disabled="!money.in && !money.out || !wallet.checkFunds() || !moneyForm.remove.$valid || !moneyForm.add.$valid">
           Process
         </button>
       </div>
     </form>
 
     <div class="wallet">
-      <h2>Grand Total: {{wallet.currency}}{{wallet.total | number:2}}</h2>
+      <h2>Grand Total: {{wallet.currency.symbol}}{{wallet.total | number:2}}</h2>
       <ul class="operations">
         <li class="header"><span class="amount">Amount</span> <span class="date">Date</span></li>
         <li ng-repeat="operation in wallet.operations">
-          <span class="amount">{{operation.amount | currency:wallet.currency}}</span>
-          <span class="date">{{operation.date | date:'HH:mm MMM dd, yyyy'}}</span>
+          <span class="amount">{{operation.amount | currency:wallet.currency.symbol}}</span>
+          <span class="date">{{operation.date | date:'HH:mm:ss MMM dd, yyyy'}}</span>
         </li>
       </ul>
     </div>

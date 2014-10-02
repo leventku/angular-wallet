@@ -1,6 +1,10 @@
 angular.module('walletApp', [])
   .constant('CURRENCIES',
-    ['£', '$', '€']
+    [
+      {value: 0, name: 'GBP', symbol:'£'},
+      {value: 1, name: 'USD', symbol:'$'},
+      {value: 2, name: 'EUR', symbol:'€'}
+    ]
   )
   .controller('MainCtrl', function ($scope, CURRENCIES) {
     function init() {
@@ -8,7 +12,9 @@ angular.module('walletApp', [])
       $scope.money = {};
       $scope.money.in = $scope.money.out = 0;
       $scope.money.currencies = CURRENCIES;
-      $scope.wallet.currency = $scope.wallet.currency || $scope.money.currencies[0];
+      $scope.wallet.currency = $scope.wallet.currency ?
+        $scope.money.currencies[$scope.wallet.currency.value] :
+        $scope.money.currencies[0];
       $scope.wallet.total = $scope.wallet.total || 0;
       $scope.wallet.hasCurrency = function () {
         return localStorage.getItem('wallet');
@@ -70,13 +76,18 @@ angular.module('walletApp', [])
       require: 'ngModel',
       link: function(scope, ele, attrs, c) {
         scope.$watch(attrs.ngModel, function () {
-          if(ele.val() >= 0) {
+          if(parseFloat(ele.val(),10) >= 0) {
             c.$positive = true;
             c.$valid = true;
           }
           else {
-            c.$positive = false;
-            c.$valid = false;
+            if (ele.val() == ''){
+              c.$positive = false;
+              c.$valid = true;
+            } else {
+              c.$positive = false;
+              c.$valid = false;
+            }
           }
         })
       }

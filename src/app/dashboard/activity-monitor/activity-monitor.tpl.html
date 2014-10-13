@@ -1,0 +1,10 @@
+<div class="wallet" ng-controller="ActivityMonitorCtrl">
+  <h2>Grand Total: {{wallet.currency.symbol}}{{wallet.total | number:2}}</h2>
+  <ul class="operations">
+    <li class="header" ng-show="wallet.operations.length"><span class="amount">Amount</span> <span class="date">Date</span></li>
+    <li ng-repeat="operation in wallet.operations">
+      <span class="amount">{{operation.amount | currency:wallet.currency.symbol}}</span>
+      <span class="date">{{operation.date | date:'HH:mm:ss MMM dd, yyyy'}}</span>
+    </li>
+  </ul>
+</div>
